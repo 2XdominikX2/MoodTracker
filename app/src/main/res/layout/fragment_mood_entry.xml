@@ -1,14 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.MoodEntryFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp">
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+        <EditText android:id="@+id/noteEditText" android:hint="Co się dziś wydarzyło?"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:minLines="3" android:inputType="textMultiLine"/>
+        <RadioGroup android:id="@+id/moodRadioGroup"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginTop="16dp">
+            <RadioButton android:id="@+id/radioHappy" android:text="Wesoły 😊"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:id="@+id/radioNeutral" android:text="Przeciętny 😐"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <RadioButton android:id="@+id/radioSad" android:text="Smutny 😢"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RadioGroup>
+        <Spinner android:id="@+id/categorySpinner"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+        <CheckBox android:id="@+id/sleptCheckBox"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Dzisiaj spałem dobrze"/>
+        <CheckBox android:id="@+id/activeCheckBox"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Byłem aktywny fizycznie"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Ocena dnia" android:layout_marginTop="16dp"/>
+        <RatingBar android:id="@+id/ratingBar" android:numStars="5"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:stepSize="1.0"/>
+        <Switch android:id="@+id/importantSwitch"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Chcę zapisać ten dzień jako ważny"
+            android:layout_marginTop="16dp"/>
+        <Button android:id="@+id/saveButton" android:text="Zapisz wpis"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"/>
+    </LinearLayout>
+</ScrollView>

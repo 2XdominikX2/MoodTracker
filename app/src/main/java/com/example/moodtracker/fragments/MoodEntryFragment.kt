@@ -1,60 +1,91 @@
 package com.example.moodtracker.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.example.moodtracker.R
+import com.example.moodtracker.data.FakeMoodRepository
+import com.example.moodtracker.data.MoodEntry
+import com.example.moodtracker.data.MoodType
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MoodEntryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MoodEntryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var noteEditText: EditText
+    private lateinit var moodRadioGroup: RadioGroup
+    private lateinit var categorySpinner: Spinner
+    private lateinit var sleptCheckBox: CheckBox
+    private lateinit var activeCheckBox: CheckBox
+    private lateinit var ratingBar: RatingBar
+    private lateinit var importantSwitch: Switch
+    private lateinit var saveButton: Button
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    private val categories = listOf("Szkoła", "Dom", "Znajomi", "Zdrowie", "Inne")
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_mood_entry, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MoodEntryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MoodEntryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        noteEditText = view.findViewById(R.id.noteEditText)
+        moodRadioGroup = view.findViewById(R.id.moodRadioGroup)
+        categorySpinner = view.findViewById(R.id.categorySpinner)
+        sleptCheckBox = view.findViewById(R.id.sleptCheckBox)
+        activeCheckBox = view.findViewById(R.id.activeCheckBox)
+        ratingBar = view.findViewById(R.id.ratingBar)
+        importantSwitch = view.findViewById(R.id.importantSwitch)
+        saveButton = view.findViewById(R.id.saveButton)
+
+        categorySpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
+
+        // Ustawienia z SharedPreferences
+        val prefs = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
+        val moodIndex = prefs.getInt("default_mood_index", 1)
+        val signature = prefs.getString("signature", "")
+
+        moodRadioGroup.check(
+            when (moodIndex) {
+                0 -> R.id.radioHappy
+                1 -> R.id.radioNeutral
+                2 -> R.id.radioSad
+                else -> R.id.radioNeutral
             }
+        )
+
+        saveButton.setOnClickListener {
+            val selectedMood = when (moodRadioGroup.checkedRadioButtonId) {
+                R.id.radioHappy -> MoodType.HAPPY
+                R.id.radioNeutral -> MoodType.NEUTRAL
+                R.id.radioSad -> MoodType.SAD
+                else -> MoodType.NEUTRAL
+            }
+
+            val entry = MoodEntry(
+                mood = selectedMood,
+                note = noteEditText.text.toString(),
+                category = categorySpinner.selectedItem.toString(),
+                sleptWell = sleptCheckBox.isChecked,
+                physicallyActive = activeCheckBox.isChecked,
+                rating = ratingBar.rating,
+                markedImportant = importantSwitch.isChecked,
+                usernameSignature = signature ?: ""
+            )
+
+            FakeMoodRepository.addMood(entry)
+            Toast.makeText(requireContext(), "Zapisano nastrój", Toast.LENGTH_SHORT).show()
+            resetForm()
+        }
+    }
+
+    private fun resetForm() {
+        noteEditText.setText("")
+        moodRadioGroup.clearCheck()
+        categorySpinner.setSelection(0)
+        sleptCheckBox.isChecked = false
+        activeCheckBox.isChecked = false
+        ratingBar.rating = 0f
+        importantSwitch.isChecked = false
     }
 }

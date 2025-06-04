@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.moodtracker.databinding.ActivityMainBinding
+import androidx.navigation.fragment.findNavController
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)?.findNavController()
+        val navController =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)?.findNavController()
         return navController?.navigateUp() ?: super.onSupportNavigateUp()
     }
 }

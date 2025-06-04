@@ -1,60 +1,77 @@
 package com.example.moodtracker.fragments
 
 import android.os.Bundle
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.moodtracker.R
+import com.example.moodtracker.data.FakeMoodRepository
+import com.example.moodtracker.data.MoodType
+import java.text.SimpleDateFormat
+import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MoodDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MoodDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var moodIcon: ImageView
+    private lateinit var dateText: TextView
+    private lateinit var noteText: TextView
+    private lateinit var categoryText: TextView
+    private lateinit var sleptText: TextView
+    private lateinit var activeText: TextView
+    private lateinit var ratingText: TextView
+    private lateinit var importantText: TextView
+    private lateinit var signatureText: TextView
+    private lateinit var deleteButton: Button
+    private lateinit var shareButton: Button
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_mood_details, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MoodDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MoodDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val moodId = arguments?.getString("moodId") ?: return
+        val entry = FakeMoodRepository.getMoodById(UUID.fromString(moodId)) ?: return
+
+        moodIcon = view.findViewById(R.id.detailsMoodIcon)
+        dateText = view.findViewById(R.id.detailsDate)
+        noteText = view.findViewById(R.id.detailsNote)
+        categoryText = view.findViewById(R.id.detailsCategory)
+        sleptText = view.findViewById(R.id.detailsSlept)
+        activeText = view.findViewById(R.id.detailsActive)
+        ratingText = view.findViewById(R.id.detailsRating)
+        importantText = view.findViewById(R.id.detailsImportant)
+        signatureText = view.findViewById(R.id.detailsSignature)
+        deleteButton = view.findViewById(R.id.detailsDeleteButton)
+        shareButton = view.findViewById(R.id.detailsShareButton)
+
+        moodIcon.setImageResource(
+            when (entry.mood) {
+                MoodType.HAPPY -> R.drawable.ic_happy
+                MoodType.NEUTRAL -> R.drawable.ic_neutral
+                MoodType.SAD -> R.drawable.ic_sad
             }
+        )
+
+        val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+
+        dateText.text = "Data: ${sdf.format(entry.date)}"
+        noteText.text = "Notatka: ${entry.note}"
+        categoryText.text = "Kategoria: ${entry.category}"
+        sleptText.text = "Spałem dobrze: ${if (entry.sleptWell) "Tak" else "Nie"}"
+        activeText.text = "Aktywny: ${if (entry.physicallyActive) "Tak" else "Nie"}"
+        ratingText.text = "Ocena: ${entry.rating} ⭐"
+        importantText.text = "Ważny dzień: ${if (entry.markedImportant) "Tak" else "Nie"}"
+        signatureText.text = "Podpis: ${entry.usernameSignature}"
+
+        deleteButton.setOnClickListener {
+            FakeMoodRepository.moodList.remove(entry)
+            Toast.makeText(requireContext(), "Wpis usunięty", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
+        }
+
+        shareButton.setOnClickListener {
+            Toast.makeText(requireContext(), "Udostępnianie (TODO)", Toast.LENGTH_SHORT).show()
+        }
     }
 }

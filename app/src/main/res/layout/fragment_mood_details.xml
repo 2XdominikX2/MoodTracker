@@ -1,14 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.MoodDetailsFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
 
-</FrameLayout>
+        <ImageView android:id="@+id/detailsMoodIcon"
+            android:layout_width="60dp" android:layout_height="60dp"
+            android:layout_gravity="center" android:layout_marginBottom="16dp" />
+
+        <TextView android:id="@+id/detailsDate" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/detailsNote" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/detailsCategory" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/detailsSlept" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/detailsActive" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/detailsRating" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/detailsImportant" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/detailsSignature" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+        <Button android:id="@+id/detailsDeleteButton" android:text="Usuń wpis"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+        <Button android:id="@+id/detailsShareButton" android:text="Udostępnij"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView>
