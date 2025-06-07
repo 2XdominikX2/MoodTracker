@@ -40,7 +40,7 @@ class MoodEntryFragment : Fragment() {
 
         categorySpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categories)
 
-        // Ustawienia z SharedPreferences
+
         val prefs = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)
         val moodIndex = prefs.getInt("default_mood_index", 1)
         val signature = prefs.getString("signature", "")

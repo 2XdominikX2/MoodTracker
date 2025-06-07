@@ -4,9 +4,10 @@
 
     <fragment
         android:id="@+id/moodEntryFragment"
-        android:name="com.example.moodtracker.fragments.MoodEntryFragment">
-        <action android:id="@+id/action_to_history" app:destination="@id/moodHistoryFragment" />
+        android:name="com.example.moodtracker.fragments.MoodEntryFragment"
+        android:label="Mood Entry">
     </fragment>
+
 
     <fragment
         android:id="@+id/moodHistoryFragment"
